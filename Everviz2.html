@@ -1,0 +1,82 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Everviz Map</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+        }
+
+        #everviz-gAdeSBY3g {
+            height: 100vh;
+            width: 100vw;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="everviz-gAdeSBY3g" class="everviz-gAdeSBY3g" data-live="true" style="height: 100%;">
+        <div></div>
+        <script src="https://app.everviz.com/inject/gAdeSBY3g/?v=13" defer="defer"></script>
+    </div>
+
+    <script>
+        window.onload = function () {
+            console.log("Page is fully loaded");
+        };
+        function pollForLocationMap() {
+            const locInstance = window.EvervizLocationMapModule;
+            if (!locInstance || (locInstance && !locInstance.projects.length)) {
+                setTimeout(pollForLocationMap, 100);
+                return;
+            }
+
+            locMap = locInstance.projects[0];
+            locMap.ref.current.on("initialized", function () {
+                //-----------------------------
+                console.log("Map is initialized and ready");
+                window.vizrt.pageState("initialized");
+                //-----------------------------
+                const statusDiv = document.querySelector("#status");
+                if (statusDiv) statusDiv.innerHTML = "Loaded";
+                setToFirstFrame();
+            });
+        }
+
+        function setToFirstFrame() {
+            const anim = locMap.ref.current.getAnimationControls();
+            anim.seek(0);
+        }
+
+        function play() {
+            const anim = locMap.ref.current.getAnimationControls();
+            anim.play();
+        }
+
+        function pause() {
+            const anim = locMap.ref.current.getAnimationControls();
+            anim.pause();
+        }
+
+        function stop() {
+            const anim = locMap.ref.current.getAnimationControls();
+            setToFirstFrame();
+            anim.stop();
+        }
+
+        pollForLocationMap();
+    </script>
+
+    <script src="https://app.everviz.com/resources/location-map/bundle/EvervizLocationMap.test.v0.iife.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://app.everviz.com/static/fonts/gordita/style.css">
+    <link rel="stylesheet" type="text/css" href="https://app.everviz.com/fonts/sWK_Oz_KE/font.css">
+    <link rel="stylesheet" type="text/css" href="https://app.everviz.com/fonts/wnDyLY2cA/font.css">
+</body>
+
+</html>
